@@ -8,20 +8,19 @@ namespace DefaultNamespace;
 /// </summary>
 public static class UniqueInOrder
 {
-    public static IEnumerable<T> Get<T>(IEnumerable<T> items) => items.Aggregate(new List<T>(),
-        (items, current) =>
+    public static IEnumerable<T> Get<T>(IEnumerable<T> items)
+    {
+        T current = default;
+        foreach (var item in items)
         {
-            if (items.Count == 0)
-                items.Add(current);
-            else
+            if (!item.Equals(current))
             {
-                var lastItem = items.Last();
-                if (!lastItem.Equals(current))
-                    items.Add(current);
+                current = item;
+                yield return current;
             }
-
-            return items;
-        });
+        }
+            
+    }
 }
 
 [TestFixture]
