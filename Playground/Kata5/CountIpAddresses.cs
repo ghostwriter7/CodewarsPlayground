@@ -1,13 +1,18 @@
 ﻿using NUnit.Framework;
+using System.Net;
+using System.Numerics;
 
 namespace Playground.Kata5;
 
 public static class CountIpAddresses
 {
-    public static long IpsBetween(string start, string end)
-    {
-        return -1;
-    }
+    public static long IpsBetween(string start, string end) => IpToLong(end) - IpToLong(start);
+
+    private static long IpToLong(string start) => (long)start.Split('.')
+            .Select((octet, index) => (octet: int.Parse(octet), index))
+            .Aggregate(BigInteger.One,
+                (total, tuple) =>
+                    BigInteger.Add(total, BigInteger.Multiply(tuple.octet, (int)Math.Pow(256, 3 - tuple.index))));
 }
 
 [TestFixture]
