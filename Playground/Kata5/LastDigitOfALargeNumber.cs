@@ -5,10 +5,38 @@ namespace Playground.Kata5;
 
 public static class LastDigitOfALargeNumber
 {
-    public static int GetLastDigit(BigInteger a, BigInteger b)
+    public static int GetLastDigit(BigInteger n1, BigInteger n2)
     {
-        return -1;
+        if (n2.IsZero)
+            return 1;
+        var lastDigitOfN1 = GetLastDigitOfBigInteger(n1);
+        var cycleLength = RepeatingCycles[lastDigitOfN1].Length;
+        var indexInCycle = (int)(n2 % cycleLength);
+        return RepeatingCycles[lastDigitOfN1][indexInCycle == 0 ? cycleLength - 1 : indexInCycle - 1];
     }
+
+    static LastDigitOfALargeNumber()
+    {
+        foreach (var digit in Enumerable.Range(0, 10))
+        {
+            List<int> cycles = [digit];
+            var currentExponent = 2;
+            while (true)
+            {
+                var lastDigit = (int)(Math.Pow(digit, currentExponent) % 10);
+                if (lastDigit == digit)
+                    break;
+                currentExponent++;
+                cycles.Add(lastDigit);
+            }
+
+            RepeatingCycles.Add(digit, cycles.ToArray());
+        }
+    }
+
+    private static Dictionary<int, int[]> RepeatingCycles = new();
+
+    private static int GetLastDigitOfBigInteger(BigInteger n) => (int)(n % 10);
 }
 
 [TestFixture]
