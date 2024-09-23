@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Text.RegularExpressions;
+using NUnit.Framework;
 
 namespace Playground.Kata5;
 
@@ -12,10 +13,8 @@ namespace Playground.Kata5;
 /// </summary>
 public class IsAlphaNumericOnly
 {
-    public static bool Check(string str)
-    {
-        return false;
-    }
+    public static bool Check(string str) =>
+        new Regex(@"^[a-zA-Z0-9]+$").IsMatch(str);
 }
 
 [TestFixture]
