@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace DefaultNamespace;
+namespace Playground.Kata6;
 
 public static class DigitalRoot
 {
