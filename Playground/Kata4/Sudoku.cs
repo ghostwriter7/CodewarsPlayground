@@ -4,11 +4,46 @@ namespace Playground.Kata4;
 
 public class Sudoku(int[][] sudoku)
 {
-    private readonly int[][] _sudoku = sudoku;
-
     public bool IsValid()
     {
-        return false;
+        var dimension = sudoku.Select(row => row.Length).Aggregate(0, Math.Max);
+        
+        if (sudoku.Any(row => row.Length != dimension))
+            return false;
+
+        var validCount = dimension * dimension;
+        if (sudoku.Select(row => row.Length).Sum() != validCount)
+            return false;
+
+        var squareSize = 0;
+        if (dimension % 2 == 0)
+            squareSize = 2;
+        else if (dimension % 3 == 0)
+            squareSize = 3;
+
+        if (squareSize == 0)
+            return false;
+        
+        for (var row = 0; row < dimension; row += squareSize)
+        for (var col = 0; col < dimension; col += squareSize)
+            if (!IsSquareValid(row, col, dimension, squareSize))
+                return false;
+
+        return true;
+    }
+
+    private bool IsSquareValid(int startRow, int startCol, int dimension, int squareSize)
+    {
+        var seenNumbers = new HashSet<int>();
+        for (var row = startRow; row < startRow + squareSize; row++)
+            for (var col = startCol; col < startCol + squareSize; col++)
+            {
+                var number = sudoku[row][col];
+                if (number < 1 || number > dimension || !seenNumbers.Add(number))
+                    return false;
+            }
+
+        return true;
     }
 }
 
